@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio Glow + Particles</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      overflow-x: hidden;
+      overflow-y: auto;
+      min-height: 100vh;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(270deg, #000000, #1a1a1a, #000000);
+      background-size: 400% 400%;
+      animation: bgAnim 8s ease infinite;
+      padding-bottom: 60px;
+    }
+
+    @keyframes bgAnim {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Hero Section */
+    .hero {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 80px 20px 60px;
+      color: white;
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      margin-bottom: 20px;
+      text-shadow: 0 0 20px rgba(255,255,255,0.5);
+      animation: fadeInDown 1s ease;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.6;
+      opacity: 0.9;
+      animation: fadeInUp 1s ease 0.3s backwards;
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Section Titles */
+    .section-title {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      color: white;
+      font-size: 2.5rem;
+      margin: 60px 0 40px;
+      text-shadow: 0 0 15px rgba(255,255,255,0.5);
+    }
+
+    /* Container */
+    .container {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 40px;
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto 60px;
+      padding: 0 20px;
+    }
+
+    .project-card {
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 25px;
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      text-align: center;
+      transition: all 0.3s ease;
+      box-shadow: 
+        0 0 20px rgba(255,255,255,0.2),
+        0 0 40px rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .project-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 
+        0 0 40px rgba(255,255,255,0.4),
+        0 0 80px rgba(255,255,255,0.2);
+      border-color: rgba(255,255,255,0.3);
+    }
+
+    .project-img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: 20px;
+      box-shadow: 0 0 20px rgba(255,255,255,0.2);
+      transition: transform 0.3s ease;
+    }
+
+    .project-card:hover .project-img {
+      transform: scale(1.05);
+    }
+
+    .project-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .project-card h3 {
+      margin: 15px 0 10px;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    .project-card p {
+      font-size: 0.95rem;
+      opacity: 0.8;
+      line-height: 1.5;
+    }
+
+    /* Wide Projects */
+    .wide-container {
+      position: relative;
+      z-index: 1;
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto 60px;
+      padding: 0 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .wide-project {
+      background: rgba(0, 0, 0, 0.8);
+      padding: 25px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 
+        0 0 20px rgba(255,255,255,0.2),
+        0 0 40px rgba(255,255,255,0.1);
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .wide-project:hover {
+      transform: translateY(-10px);
+      box-shadow: 
+        0 0 40px rgba(255,255,255,0.4),
+        0 0 80px rgba(255,255,255,0.2);
+      border-color: rgba(255,255,255,0.3);
+    }
+
+    .wide-project img {
+      width: 100%;
+      max-height: 300px;
+      object-fit: cover;
+      border-radius: 14px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 20px rgba(255,255,255,0.2);
+      transition: transform 0.3s ease;
+    }
+
+    .wide-project:hover img {
+      transform: scale(1.02);
+    }
+
+    .wide-project h3 {
+      color: white;
+      font-size: 1.6rem;
+      font-weight: 600;
+    }
+
+    /* Scroll to top button */
+    .scroll-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 50px;
+      height: 50px;
+      background: rgba(255,255,255,0.2);
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+    }
+
+    .scroll-top.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .scroll-top:hover {
+      background: rgba(255,255,255,0.3);
+      transform: translateY(-5px);
+      box-shadow: 0 0 30px rgba(255,255,255,0.5);
+    }
+
+    .scroll-top::before {
+      content: '↑';
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 12px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(0,0,0,0.5);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.3);
+      border-radius: 6px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255,255,255,0.5);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+
+      .hero p {
+        font-size: 1rem;
+      }
+
+      .section-title {
+        font-size: 2rem;
+      }
+
+      .container {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+    }
+    p{
+        color: aliceblue;
+        text-shadow:  0 0 10px; 
+
+    
+    }
+  </style>
+</head>
+<body>
+  <canvas id="particles"></canvas>
+
+  <!-- Hero Section -->
+  <div class="hero">
+    <h1>Welcome to my Profile</h1>
+    <p>Hi, I'm Hamza AKA Yuri, a graphic designer who creates banners for YouTube, thumbnails, photo covers, and more.<br>
+    For contact, all social media links are below.</p>
+  </div>
+
+  <!-- Square Projects Section -->
+  <h2 class="section-title">Featured Projects</h2>
+  <div class="container">
+    <div class="project-card">
+      <div class="project-img">
+        <img src="carzxz.png" alt="Project 1">
+      </div>
+      <h3>Montagem Advana</h3>
+    </div>
+
+    <div class="project-card">
+      <div class="project-img">
+        <img src="king win funk.png" alt="Project 2">
+      </div>
+      <h3>Kingwin Funk</h3>
+    </div>
+
+    <div class="project-card">
+      <div class="project-img">
+        <img src="quina.png" alt="Project 3">
+      </div>
+      <h3>Sequénca Vai Toma</h3>
+    </div>
+        <div class="project-card">
+      <div class="project-img">
+        <img src="funky.png" alt="Project 1">
+      </div>
+      <h3>Different world funk</h3>
+    </div>
+        <div class="project-card">
+      <div class="project-img">
+        <img src="mala fama.png" alt="Project 1">
+      </div>
+      <h3>MALA FAMA</h3>
+    </div>
+        <div class="project-card">
+      <div class="project-img">
+        <img src="mala vida.png" alt="Project 1">
+      </div>
+      <h3>MALA VIDA</h3>
+    </div>
+  </div>
+
+  <!-- YouTube Headers Section -->
+  <h2 class="section-title">YouTube Headers</h2>
+  <div class="wide-container">
+    <div class="wide-project">
+      <img src="POKI.png" alt="Banner 1">
+      <h3>Pokimane Header</h3>
+    </div>
+
+    <div class="wide-project">
+      <img src="yuria.png" alt="Banner 2">
+      <h3>Punch Header</h3>
+    </div>
+
+    <div class="wide-project">
+      <img src="maore.png" alt="Banner 3">
+      <h3>Tony Montana Header</h3>
+    </div>
+
+    <div class="wide-project">
+      <img src="aloulou.png" alt="Banner 4">
+      <h3>Roblox Header</h3>
+    </div>
+
+    <div class="wide-project">
+      <img src="rea.png" alt="Banner 5">
+      <h3>Bleach Header</h3>
+    </div>
+
+    <div class="wide-project">
+      <img src="lio.png" alt="Banner 6">
+      <h3>The Ghost Header</h3>
+    </div>
+  </div>
+
+  <!-- Scroll to Top Button -->
+  <div class="scroll-top" id="scrollTop"></div>
+
+  <script>
+    const canvas = document.getElementById("particles");
+    const ctx = canvas.getContext("2d");
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let particlesArray = [];
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 1;
+        this.speedX = Math.random() * 1 - 0.5;
+        this.speedY = Math.random() * 1 - 0.5;
+        this.opacity = Math.random() * 0.5 + 0.5;
+      }
+
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        if (this.x > canvas.width) this.x = 0;
+        if (this.x < 0) this.x = canvas.width;
+        if (this.y > canvas.height) this.y = 0;
+        if (this.y < 0) this.y = canvas.height;
+      }
+
+      draw() {
+        ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function init() {
+      particlesArray = [];
+      for (let i = 0; i < 120; i++) {
+        particlesArray.push(new Particle());
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particlesArray.forEach(particle => {
+        particle.update();
+        particle.draw();
+      });
+      requestAnimationFrame(animate);
+    }
+
+    window.addEventListener("resize", () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      init();
+    });
+
+    init();
+    animate();
+
+    // Scroll to top functionality
+    const scrollTopBtn = document.getElementById('scrollTop');
+
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 300) {
+        scrollTopBtn.classList.add('visible');
+      } else {
+        scrollTopBtn.classList.remove('visible');
+      }
+    });
+
+    scrollTopBtn.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+  </script>
+  <center>
+  <div>
+  <a href="https://www.instagram.com/yurinowayy/">Instagram</a>
+  <p>discord:hv6n.</p>
+</div>
+    </center>
+</body>
+</html>
